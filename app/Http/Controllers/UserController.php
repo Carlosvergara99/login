@@ -12,14 +12,14 @@ class UserController extends Controller
 
     public function index()
     {
-        $data = User::all();
-        return response()->json(['user' =>$data]);
+        $data = User::all('id','name','email');
+        return response()->json(['users' =>$data]);
     }
 
    public function create(Request $request)
    {
         $validator = Validator::make($request->all(), [
-            'email' => 'email|unique:prize'
+            'email' => 'email|unique:users'
         ]);
 
         if ($validator->fails())
@@ -29,31 +29,44 @@ class UserController extends Controller
             ], 403);
         }
 
-      $user = User::created($request->except('token'));
+      $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password)
+        ]);
       return response()->json([
-        "message" => "prize record created"
+        "user" => $user
         ], 201);
 
    }
 
-   public function edit(Request $request)
-   
-   {
-        $user = User::find($request->id);
-
-        return response()->json([
-            "data" => $user
-            ], 201);
-   }
-
      public function update(Request $request)
      {
+        $validator = Validator::make($request->all(), [
+            'email' => 'email|unique:users,email,'.$request->id,
+        ]);
+        if ($validator->fails())
+        {
+            return response()->json([
+                "message" => "email ya existe"
+            ], 403);
+        }
         
         $user = User::find($request->id);
-        $user->update($request->except('token', 'id'));
+        if ($request->password) {
+            $user->update($request->only('name','email'));
+
+        }else{
+            $user->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password)
+            ] );
+
+        }
 
         return response()->json([
-            "message" => "user updated"
+            "user" => $user
             ], 201);
      }
 

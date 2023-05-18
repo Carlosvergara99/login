@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -17,7 +17,8 @@ class AuthController extends Controller
             $authUser = Auth::user();
             $user = User::where('email', $request->email)->first();
             $token = $user->createToken('authToken')->plainTextToken;
-            return response()->json(['user'=>$authUser,'token' =>$token] , 200);
+            return response()->json(['user'=>$authUser ], 200);
+
         };
 
         return response()->json(['error' => 'Unauthorized'], 401);
@@ -43,5 +44,13 @@ class AuthController extends Controller
         $token = $user->createToken('authToken')->plainTextToken;
 
         return response()->json(['token' => $token], 201);
+    }
+ 
+    public function logout(Request $request)
+    {
+        DB::table('personal_access_tokens')
+           ->where('tokenable_id', $request->id)
+           ->delete();
+        return response()->json(['message' => 'Logged out'], 200);
     }
 }

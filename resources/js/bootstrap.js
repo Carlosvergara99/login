@@ -1,5 +1,4 @@
 import 'bootstrap';
-import axios from 'axios';
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -7,30 +6,9 @@ import axios from 'axios';
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
+import axios from 'axios';
 window.axios = axios;
-
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
-
-
-function getCookie(name) {
-    const cookieString = document.cookie;
-    const cookies = cookieString.split(';');
-    
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim();
-      
-      if (cookie.startsWith(name + '=')) {
-        // Devolver el valor de la cookie
-        return cookie.substring(name.length + 1);
-      }
-    }
-    
-    // La cookie no fue encontrada
-    return null;
-  }
-  const token = getCookie('XSRF-TOKEN');
-window.axios.defaults.headers.common['verify_csrf_token'] =  token;
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

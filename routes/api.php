@@ -20,11 +20,11 @@ use App\Http\Controllers\UserController;
 
 Route::post('/login', [AuthController::class,'login']);
 Route::post('/register', [AuthController::class,'register']);
+ Route::post('/logout', [AuthController::class,'logout']);
 
-Route::middleware('auth:sanctum')->get('/user/index', [UserController::class,'index']);  
-Route::middleware('auth:sanctum')->post('/user/create', [UserController::class,'save']);  
-Route::middleware('auth:sanctum')->post('/user/update', [UserController::class,'update']);  
-Route::middleware('auth:sanctum')->post('/user/edit', [UserController::class,'edit']);  
-Route::middleware('auth:sanctum')->post('/user/edit', [UserController::class,'edit']);  
-Route::middleware('auth:sanctum')->post('/user/delete', [UserController::class,'delete']);  
+Route::get('/user/index', [UserController::class,'index']);  
+Route::post('/user/create', [UserController::class,'create']);  
+Route::post('/user/update', [UserController::class,'update']);  
+//Route::post('/user/edit', [UserController::class,'edit']);  
+Route::post('/user/delete', [UserController::class,'delete']);  
 

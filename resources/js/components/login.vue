@@ -146,7 +146,7 @@ export default {
   
          this.$swal(
             'Error!',
-            'Por favor ingrese  el emaiñ',
+            'Por favor ingrese  el email',
             'error'
          );
        } else if  ( this.password =='') {
